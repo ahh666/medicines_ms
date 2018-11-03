@@ -1,0 +1,57 @@
+<%var obj={pageTitle:"药品出库"}%>
+{{include "../header.html" obj}}
+<div class=" container">
+    {{include "../pageHeader.html" obj}}
+
+    <form class=" form-horizontal" method="POST" action="/Stock_IO/doStockOut" enctype="application/x-www-form-urlencoded">
+        {{each objArr item index}}
+        <%var obj={item:item}%>
+        {{if item[1]=="验收员编号"}}
+        <div class="col-sm-6 col-sm-offset-3">
+            <div class=" form-group">
+                <label for="" class=" control-label col-sm-3">{{item[1]}}</label>
+                <div class="col-sm-7">
+                    <select class=" form-control" name="{{item[0]}}">
+                        <option value="3001">3001</option>
+                        <option value="3002">3002</option>
+                        <option value="3003">3003</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        {{else if item[1]=="时间"}}
+        <div class="col-sm-6 col-sm-offset-3">
+            <div class=" form-group">
+                <label for="" class=" control-label col-sm-3">{{item[1]}}</label>
+                <div class="col-sm-7">
+                    <input id="date" type="text" readonly class=" form-control" name="{{item[0]}}">
+                </div>
+            </div>
+        </div>
+        {{else}}
+        <div class="col-sm-6 col-sm-offset-3">
+            {{include "../bs_view/form_group_input.html" obj }}
+        </div>
+        {{/if}}
+        {{/each}}
+        <div class="col-sm-6 col-sm-offset-3">
+            <div class=" form-group">
+                <div class=" col-sm-offset-3 col-sm-7">
+                    <button type="submit" class=" btn btn-primary btn-submit-loading">确认信息</button>
+                    <a href="stockOutList" class=" btn btn-info">返回列表</a>
+                </div>
+            </div>
+        </div>
+
+
+    </form>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("input.form-control").addTips();
+        $('#date').valDate();
+    })
+</script>
+
+
+{{include "../footer.html"}}

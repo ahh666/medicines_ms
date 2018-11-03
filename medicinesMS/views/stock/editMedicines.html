@@ -1,0 +1,88 @@
+<% var obj={pageTitle:"编辑药品信息"}%>
+{{include "../header.html" obj}}
+<div class=" container">
+    {{include "../pageHeader.html" obj}}
+    <form class=" form-horizontal" method="POST" action="/Stock/doEditMedicines" enctype="application/x-www-form-urlencoded">
+        <div class="col-sm-6 col-sm-offset-3">
+            <div class=" form-group">
+                <label class=" control-label col-sm-3">药品编号</label>
+                <div class=" col-sm-7">
+                    <input type="text" class=" form-control" name="m_id" value="{{model.m_id}}">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-sm-offset-3">
+            <div class=" form-group">
+                <label class=" control-label col-sm-3">药品名称</label>
+                <div class=" col-sm-7">
+                    <input type="text" class=" form-control" name="m_name" value="{{model.m_name}}">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-sm-offset-3">
+            <div class=" form-group">
+                <label class=" control-label col-sm-3">批号</label>
+                <div class=" col-sm-7">
+                    <input type="text" class=" form-control" name="m_lotnum" value="{{model.m_lotnum}}">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-sm-offset-3">
+            <div class=" form-group">
+                <label class=" control-label col-sm-3">库存</label>
+                <div class=" col-sm-7">
+                    <input type="text" class=" form-control" name="m_number" value="{{model.m_number}}">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-sm-offset-3">
+            <div class=" form-group">
+                <label class=" control-label col-sm-3">单位</label>
+                <div class=" col-sm-7">
+                    <input type="text" class=" form-control" name="m_unit" value="{{model.m_unit}}">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-sm-offset-3">
+            <div class=" form-group">
+                <label class=" control-label col-sm-3">进价</label>
+                <div class=" col-sm-7">
+                    <input type="text" class=" form-control" name="m_bit" value="{{model.m_bit}}">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-sm-offset-3">
+            <div class=" form-group">
+                <label class=" control-label col-sm-3">预售价</label>
+                <div class=" col-sm-7">
+                    <input type="text" class=" form-control" name="m_sell" value="{{model.m_sell}}">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-sm-offset-3">
+
+            <div class=" form-group">
+                <label class=" control-label col-sm-3">验收人编号</label>
+                <div class=" col-sm-7">
+                    <select name="a_id" class=" form-control">
+                        <option value="3001" {{if model.a_id=="3001"}} selected{{/if}}>3001 </option> <option value="3002"
+                            {{if model.a_id=="3002"}} selected{{/if}}>3002 </option> <option value="3003"
+                            {{if model.a_id=="3003"}} selected{{/if}}>3003 </option> </select> </div> </div> </div>
+
+                            <div class="col-sm-6 col-sm-offset-3">
+                            <div class=" form-group">
+                                <div class=" col-sm-offset-3 col-sm-7">
+                                    <button type="submit" class=" btn btn-danger btn-submit-loading">确认修改</button>
+                                    <button type="button" class=" btn btn-info" onclick="history.back()">返回列表</button>
+                                </div>
+                            </div>
+                </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("input.form-control").addTips(); //添加placehodler
+    })
+</script>
+
+{{include "../footer.html"}}

@@ -1,0 +1,92 @@
+<%var obj={pageTitle:"药品出库信息列表"}%>
+{{include "../header.html" obj}}
+<div class=" container">
+    {{include "../pageHeader.html" obj}}
+    <form method="GET" action="/Stock_IO/out_queryByList" class=" form-inline" style="margin-bottom:15px;float: right;">
+        <div class=" form-group">
+            <label for="" class=" control-label">药品编号</label>
+            <input type="text" class=" form-control" placeholder="请输入药品编号查询" name="m_id">
+        </div>
+        <div class=" form-group">
+            <label for="" class=" control-label">药品名字</label>
+            <input type="text" class=" form-control" placeholder="请输入药品名字查询" name="m_name">
+        </div>
+        <div class=" form-group">
+            <button type="submit" class=" btn btn-success">
+                <span class=" glyphicon glyphicon-search"></span>
+                查询
+            </button>
+        </div>
+    </form>
+    <div class="btn-group" style="margin-bottom:15px;float: left;">
+        <!-- <button type="button" class=" btn btn-primary btn-warn-checked">
+            <span class=" glyphicon glyphicon-upload"></span>
+            药品出库
+        </button> -->
+        <button type="button" class=" btn btn-danger btn-warn-checked">
+            <span class=" glyphicon glyphicon-exclamation-sign"></span>
+            批量报错
+        </button>
+    </div>
+    <div style="clear: both;"></div>
+    <div class=" table-responsive">
+        <table class=" table table-bordered table-hover table-striped text-center">
+            <tr style="background-color: #4cae4c;color: #fff;font-weight: bold">
+                <td>
+                    <label for="ckAll">
+                        <input type="checkbox" id="ckAll" data-toggle="ckAll">全选
+                    </label>
+                </td>
+                <td>药品编号</td>
+                <td>药名</td>
+                <td>批次</td>
+                <td>数量</td>
+                <td>单位</td>
+                <td>售价</td>
+                <td>出库时间</td>
+                <td>验收人编号</td>
+                <td>操作</td>
+            </tr>
+            {{each listData item index}}
+            <tr>
+                <td>
+                    <input type="checkbox" name="ck" value="{{item.m_id}}">
+                </td>
+                <td>{{item.m_id}}</td>
+                <td>{{item.m_name}}</td>
+                <td>{{item.m_lotnum}}</td>
+                <td>{{item.m_number}}</td>
+                <td>{{item.m_unit}}</td>
+                <td>{{item.m_sell}}</td>
+                <td>{{item.m_date_out.toLocaleString()}}</td>
+                <td>{{item.a_id}}</td>
+                <td>
+                    <button type="button" class=" btn btn-xs btn-danger btn-warn" data-m_id="{{item.m_id}}">信息报错</button>
+                </td>
+            </tr>
+            {{/each}}
+        </table>
+    </div>
+
+    <!-- 分页 -->
+    <ul class=" pagination pull-right">
+        <%for(var i=1;i<=pageCount;i++){%>
+        {{if pageIndex==i}}
+        <li class="active"><a href="/Stock_IO/out_queryByList?pageIndex={{i}}">{{i}}</a></li>
+        {{else}}
+        <li><a href="/Stock_IO/out_queryByList?pageIndex={{i}}">{{i}}</a></li>
+        {{/if}}
+        <%}%>
+    </ul>
+</div>
+<script type="text/javascript">
+    $(function () {
+        //设置分页按钮背景色
+        $('ul>li.active>a').css('background-color', '#5cb85c');
+
+        
+
+    });
+</script>
+
+{{include "../footer.html"}}

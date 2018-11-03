@@ -1,0 +1,25 @@
+{
+  "name": "medicines_ms",
+  "version": "2.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "keywords": [
+    "药品进出库管理系统"
+  ],
+  "author": "艾欢欢",
+  "license": "ISC",
+  "dependencies": {
+    "art-template": "^4.13.1",
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "express-art-template": "^1.0.1",
+    "express-session": "^1.15.6",
+    "mysql": "^2.16.0",
+    "nodemailer": "^4.6.8"
+  }
+}

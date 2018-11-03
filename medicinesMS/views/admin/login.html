@@ -1,0 +1,182 @@
+<%var obj={pageTitle:"药品进出库管理系统"}%>
+{{include "../header.html" obj}}
+<!--导入钉钉的第三方JS文件-->
+<script src="//g.alicdn.com/dingding/dinglogin/0.0.5/ddLogin.js"></script>
+
+<nav class=" navbar navbar-default navbar-fixed-top" style="height: 60px; line-height: 60px;">
+    <div class=" container" >
+        <div class=" navbar-header">
+            <img src="/public/images/logo.png" alt="" width="30px" style="margin-top:-8px;"><span style="margin-left:20px;font-size:1.8em">药品进出库管理系统</span>
+        </div>
+    </div>
+</nav>
+<!--
+        action:提交地址  /checkLogin
+        默认省略掉了一个域Origin
+        http://127.0.0.1/checkLogin
+    -->
+    <!--下面登陆的图片区域-->
+<div class=" jumbotron center-box" style="top: 60px">
+        <img src="/public/images/login-bg.png" alt="" class="login-bg">
+        <div class="login-box">
+            <ul class="login-type list-unstyled">
+                <li class="active"><a href="#">扫码登陆</a></li>
+                <li><a href="#">账号登陆</a></li>
+            </ul>
+            <!--钉钉招码登陆-->
+            <div class="login-type-code" id="ding-login">
+            </div>
+            <!--普通账号登陆-->
+            <div class="login-type-user" style="display:none">
+                <form id="loginForm" method="POST" action="/Admin/checkLogin" enctype="application/x-www-form-urlencoded">
+                    <div class=" form-group">
+                        <div class=" input-group">
+                            <div class=" input-group-addon">
+                                <span class=" glyphicon-user glyphicon"></span>
+                            </div>
+                            <input type="text" class=" form-control" name="u_id" placeholder="请输入用户名">
+                        </div>
+                    </div>
+                    <div class=" form-group">
+                        <div class=" input-group">
+                            <div class=" input-group-addon">
+                                <span class=" glyphicon-lock glyphicon"></span>
+                            </div>
+                            <input type="password" class=" form-control" name="u_password" placeholder="请输入密码">
+                        </div>
+                    </div>
+                    <div class=" form-group">
+                        <button type="submit" id="btnLogin" class=" btn btn-info btn-block">登 陆</button>
+                    </div>
+                    <div class=" form-group">
+                        <a href="#" class="pull-left">忘记密码</a>
+                        <a href="/Admin/register" class=" pull-right">我要注册</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <style type="text/css">
+        .center-box {
+            position: relative;
+            padding: 0px;
+    
+        }
+    
+        .login-bg {
+            width: 100%;
+            display: block;
+            height: auto;
+            min-height: 450px;
+        }
+    
+        .login-box {
+            width: 300px;
+            height: 350px;
+            border: 1px solid #ececec;
+            position: absolute;
+            top: 50px;
+            right: 100px;
+            background-color: white;
+            border-radius: 5px;
+        }
+    
+        .login-type {
+            height: 55px;
+        }
+    
+        .login-type>li {
+            width: 50%;
+            float: left;
+            border-bottom: 2px solid gray;
+    
+        }
+    
+        .login-type>li>a {
+            text-decoration: none;
+            color: black;
+            display: block;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            line-height: 55px;
+        }
+    
+        .login-type>li>a:active {
+            text-decoration: none;
+        }
+    
+        .login-type>li.active>a {
+            color: #46b8da;
+        }
+    
+        .login-type>li.active {
+            border-bottom-color: #46b8da;
+            font-weight: bold;
+        }
+    
+        .login-type-code,
+        .login-type-user {
+            position: absolute;
+            width: 100%;
+            bottom: 0px;
+            top: 55px;
+            background-color: white;
+        }
+    
+        .login-type-user {
+            box-sizing: border-box;
+            padding: 25px 15px 0px;
+        }
+    </style>
+
+<script type="text/javascript">
+
+    $(function () {
+
+        $(".login-type>li").click(function () {
+            if ($(this).hasClass("active")) {
+                return;    //如果当前元素已经有了active样式，则不做任何设置
+            }
+            $(".login-type>li.active").removeClass("active").siblings().addClass("active");
+            var index = $(".login-type>li.active").index();
+            $(".login-box>div").eq(index).show().siblings("div").hide();
+
+        });
+
+        //加载钉钉JS配置代码 生成一个二维码图片
+        var go_to_url = "https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=dingoat17fjzaqhbuijem6&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=http://www.seven7.com/Admin/scanCode";
+        //urlencoded编码
+        var obj = DDLogin({
+            id: "ding-login",//这里需要你在自己的页面定义一个HTML标签并设置id，例如<div id="login_container"></div>或<span id="login_container"></span>
+            goto: encodeURIComponent(go_to_url),
+            width: "298",
+            height: "400"
+        });
+        //这个go_to就是扫码以后要跳转到的自己的网页
+
+
+        var hanndleMessage = function (event) {
+            var origin = event.origin;
+            console.log("origin", event.origin);
+            if (origin == "https://login.dingtalk.com") { //判断是否来自ddLogin扫码事件。
+                var loginTmpCode = event.data; //拿到loginTmpCode后就可以在这里构造跳转链接进行跳转了
+                console.log(loginTmpCode);
+                var url="https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=dingoat17fjzaqhbuijem6&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=http://www.seven7.com/Admin/scanCode&loginTmpCode="+loginTmpCode;
+                location.href=url;   //跳转到指定的页面
+            }
+
+        };
+        
+        //采用了postMessage的跨页面通讯，因为扫描钉钉的二维码以后，钉钉告诉你的页面，到底是扫描成功，还是扫描失败
+        //window.postMessage方法
+        if (typeof window.addEventListener != 'undefined') {
+            window.addEventListener('message', hanndleMessage, false);
+        } else if (typeof window.attachEvent != 'undefined') {
+            window.attachEvent('onmessage', hanndleMessage);
+        }
+        
+    });
+</script>
+{{include "../footer.html"}}

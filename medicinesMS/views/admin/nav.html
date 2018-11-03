@@ -1,0 +1,29 @@
+<nav class=" navbar navbar-default navbar-fixed-top" style="background-color:#fff;line-height: 50px">
+    <div class=" container-fluid" >
+        <div class=" navbar-header">
+                <img src="/public/images/logo.png" alt="" width="28px" style="margin-top:-8px;"><span style="margin-left:20px;font-size:1.6em">药品进出库管理系统</span>
+            <button type="button" class="navbar-btn navbar-toggle">
+                <span class=" icon-bar"></span>
+                <span class=" icon-bar"></span>
+                <span class=" icon-bar"></span>
+            </button>
+        </div>
+        <div class=" navbar-collapse collapse" >
+            <ul class=" nav navbar-nav navbar-right" >
+                <li><a href="javascript:;">>当前登录管理员：<span class=" text-primary">{{userInfo.u_name}}</span></a></li>
+                <li><a href="#">>修改密码</a></li>
+                <li><a href="/Admin/logOut">！退出系统</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<style>
+    .navbar-default .navbar-brand,
+    .navbar-default .navbar-nav>li>a{
+        color: #000;
+    }
+    .navbar-default .navbar-nav>li>a>span{
+        color:crimson;
+    }
+</style>

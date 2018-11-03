@@ -1,0 +1,192 @@
+<%var obj={pageTitle:"药品信息列表"}%>
+{{include "../header.html" obj}}
+<div class=" container">
+    {{include "../pageHeader.html" obj}}
+    <form method="GET" action="/Stock/queryByList" class=" form-inline" style="margin-bottom:15px;float: right;">
+        <div class=" form-group">
+            <label for="" class=" control-label">药品编号</label>
+            <input type="text" class=" form-control" placeholder="请输入药品编号查询" name="m_id">
+        </div>
+        <div class=" form-group">
+            <label for="" class=" control-label">药品名字</label>
+            <input type="text" class=" form-control" placeholder="请输入药品名字查询" name="m_name">
+        </div>
+        <div class=" form-group">
+            <button type="submit" class=" btn btn-primary">
+                <span class=" glyphicon glyphicon-search"></span>
+                查询
+            </button>
+        </div>
+    </form>
+    <div class="btn-group" style="margin-bottom:15px;float: left;">
+        <!--将A标签转换成按钮样式-->
+        <a href="/Stock/addMedicines" class=" btn btn-primary">
+            <span class=" glyphicon glyphicon-plus"></span>
+            药品新增
+        </a>
+        <button type="button" class=" btn btn-danger btn-delete-checked">
+            <span class=" glyphicon glyphicon-trash"></span>
+            批量删除
+        </button>
+    </div>
+    <div style="clear: both;"></div>
+    <div class=" table-responsive">
+        <table class=" table table-bordered table-hover table-striped text-center">
+            <tr style="background-color: #4d8fc9;color: #fff;font-weight: bold">
+                <td>
+                    <label for="ckAll">
+                        <input type="checkbox" id="ckAll" data-toggle="ckAll">全选
+                    </label>
+                </td>
+                <td>药品编号</td>
+                <td>药名</td>
+                <td>批次</td>
+                <td>库存</td>
+                <td>单位</td>
+                <td>进价</td>
+                <td>预售价</td>
+                <td>验收人编号</td>
+                <td>操作</td>
+            </tr>
+            {{each listData item index}}
+            <tr>
+                <td>
+                    <input type="checkbox" name="ck" value="{{item.m_id}}">
+                </td>
+                <td>{{item.m_id}}</td>
+                <td>{{item.m_name}}</td>
+                <td>{{item.m_lotnum}}</td>
+                <td>{{item.m_number}}</td>
+                <td>{{item.m_unit}}</td>
+                <td>{{item.m_bit}}</td>
+                <td>{{item.m_sell}}</td>
+                <td>{{item.a_id}}</td>
+                <td>
+                    <!--请求地址不可变
+                        请求参数可变
+                        后端跨页面传值
+                    -->
+                    <!-- <a href="javascript:;" class=" btn btn-xs btn-warning" data-target="#modal2"
+                        data-toggle='modal'>修改</a> -->
+                        <a href="/Stock/editMedicines?m_id={{item.m_id}}" class=" btn btn-xs btn-warning">编辑</a>
+                    <button type="button" class=" btn btn-xs btn-danger btn-delete" data-m_id="{{item.m_id}}">删除</button>
+                </td>
+            </tr>
+            {{/each}}
+        </table>
+    </div>
+
+    <!-- 药品信息修改模态框 -->
+    <div class="modal fade" id="modal2">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="close" data-dismiss="modal">&times;</div>
+                    <h4 class=" text-center text-primary">药品信息修改</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form class=" form-horizontal" method="POST" action="/Stock/editMedicines" enctype="application/x-www-form-urlencoded">
+
+                        {{each objArr item index}}
+                        <%var obj={item:item}%>
+                        {{if item[1]=="验收员编号"}}
+                        <div class="col-sm-6 col-sm-offset-3">
+                            <div class=" form-group">
+                                <label for="" class=" control-label col-sm-3">{{item[1]}}</label>
+                                <div class="col-sm-7">
+                                    <select class=" form-control" name="{{item[0]}}">
+                                        <option value="3001">3001</option>
+                                        <option value="3002">3002</option>
+                                        <option value="3003">3003</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        {{else}}
+                        <div class="col-sm-6 col-sm-offset-3">
+                            {{include "../bs_view/form_group_input.html" obj }}
+                        </div>
+                        {{/if}}
+                        {{/each}}
+
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">保存信息</button>
+                    <button type="reset" class="btn btn-danger" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- 分页 -->
+    <ul class=" pagination pull-right">
+        <%for(var i=1;i<=pageCount;i++){%>
+        {{if pageIndex==i}}
+        <li class="active"><a href="/Stock/queryByList?pageIndex={{i}}">{{i}}</a></li>
+        {{else}}
+        <li><a href="/Stock/queryByList?pageIndex={{i}}">{{i}}</a></li>
+        {{/if}}
+        <%}%>
+    </ul>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(".btn-delete").click(function () {
+            if (confirm("你确定要删除吗？")) {
+                //根据药品编号（m_id）删除
+                // var m_id=$(this).parent().parent().children("td").eq(1).text().trim();
+                var m_id = $(this).data("m_id");
+                $.get("/Stock/deleteById?m_id=" + m_id, function (data) {
+                    //data代表后台传递过来的值
+                    //后面返回的是一个JSON数据
+                    var jsonObj = JSON.parse(data);
+                    if (jsonObj.status == "success") {
+                        alert("删除成功");
+                        location.reload();
+                    } else {
+                        alert(jsonObj.msg);
+                    }
+                });
+            }
+        });
+
+        
+        //如果通过Ajax向后台传递多条数据？
+        //如果通过Ajax向后台传递数组？
+        $(".btn-delete-checked").click(function () {
+            //看是否有选中项
+            if ($("input[name='ck']:checked").length > 0) {
+                if (confirm("你确定要删除选中项吗")) {
+                    //获取选项的m_id
+                    var m_idArr = [];
+                    $("input[name='ck']:checked").each(function (index, item) {
+                        //遍历选中的所有项，获取选中的m_id
+                        m_idArr.push($(this).val());
+                    });
+
+                    $.get("/Stock/deleteByChecked?m_idArr=" + m_idArr.join("-"), function (pageJson) {
+                        //var jsonObj=JSON.parse(pageJson);
+                        //将JSON字符串转换成JS对象
+                        //后台如果使用了resp.json()传输，那么，接收到的，就直接是一个对象
+                        var jsonObj = pageJson;
+                        if (jsonObj.status == "success") {
+                            //说明成功
+                            alert("批量删除成功");
+                            location.reload();
+                        } else {
+                            alert(jsonObj.msg);
+                        }
+                    });
+
+                }
+            }
+
+        });
+    })
+</script>
+
+{{include "../footer.html"}}

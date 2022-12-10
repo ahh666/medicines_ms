@@ -16,7 +16,7 @@
     "art-template": "^4.13.1",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "express-art-template": "^1.0.1",
     "express-session": "^1.15.6",
     "mysql": "^2.16.0",
